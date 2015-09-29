@@ -1,0 +1,42 @@
+{
+  "name": "touch-pinch",
+  "version": "1.0.0",
+  "description": "minimal touch-pinch gesture detection",
+  "main": "index.js",
+  "license": "MIT",
+  "author": {
+    "name": "Matt DesLauriers",
+    "email": "dave.des@gmail.com",
+    "url": "https://github.com/mattdesl"
+  },
+  "dependencies": {
+    "dprop": "^1.0.0",
+    "events": "^1.0.2",
+    "gl-vec2": "^1.0.0",
+    "mouse-event-offset": "^3.0.2"
+  },
+  "devDependencies": {
+    "budo": "^5.1.0",
+    "dom-css": "^1.1.2",
+    "garnish": "^3.2.1"
+  },
+  "scripts": {
+    "test": "node test.js",
+    "start": "budo demo.js:bundle.js --live | garnish"
+  },
+  "keywords": [
+    "touch",
+    "pinch",
+    "detection",
+    "zoom",
+    "pan"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Jam3/touch-pinch.git"
+  },
+  "homepage": "https://github.com/Jam3/touch-pinch",
+  "bugs": {
+    "url": "https://github.com/Jam3/touch-pinch/issues"
+  }
+}
