@@ -56,6 +56,11 @@ function touchPinch (target) {
   function disable () {
     if (!enabled) return
     enabled = false
+    activeCount = 0
+    fingers[0] = null
+    fingers[1] = null
+    lastDistance = 0
+    ended = false
     target.removeEventListener('touchstart', onTouchStart, false)
     target.removeEventListener('touchmove', onTouchMove, false)
     target.removeEventListener('touchend', onTouchRemoved, false)
