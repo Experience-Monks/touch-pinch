@@ -1,6 +1,6 @@
 {
   "name": "touch-pinch",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "minimal two-finger pinch gesture detection",
   "main": "index.js",
   "license": "MIT",
