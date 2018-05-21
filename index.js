@@ -89,14 +89,16 @@ function touchPinch (target) {
         newFinger.touch = newTouch
         eventOffset(newTouch, target, newFinger.position)
 
-        var oldTouch = fingers[oldIndex] ? fingers[oldIndex].touch : undefined
-        emitter.emit('place', newTouch, oldTouch)
+        var otherTouch = fingers[oldIndex] ? fingers[oldIndex].touch : undefined
+        Object.assign(ev, {newTouch, otherTouch})
+        emitter.emit('place', ev)
 
         if (!first) {
-          var initialDistance = computeDistance()
+          var distance = computeDistance()
           ended = false
-          emitter.emit('start', initialDistance)
-          lastDistance = initialDistance
+          Object.assign(ev, {distance})
+          emitter.emit('start', ev)
+          lastDistance = distance
         }
       }
     }
@@ -115,29 +117,31 @@ function touchPinch (target) {
     }
 
     if (activeCount === 2 && changed) {
-      var currentDistance = computeDistance()
-      emitter.emit('change', currentDistance, lastDistance)
-      lastDistance = currentDistance
+      var distance = computeDistance()
+      Object.assign(ev, {distance, lastDistance})
+      emitter.emit('change', ev)
+      lastDistance = distance
     }
   }
 
   function onTouchRemoved (ev) {
     for (var i = 0; i < ev.changedTouches.length; i++) {
-      var removed = ev.changedTouches[i]
-      var idx = indexOfTouch(removed)
+      var removedTouch = ev.changedTouches[i]
+      var idx = indexOfTouch(removedTouch)
 
       if (idx !== -1) {
         fingers[idx] = null
         activeCount--
         var otherIdx = idx === 0 ? 1 : 0
         var otherTouch = fingers[otherIdx] ? fingers[otherIdx].touch : undefined
-        emitter.emit('lift', removed, otherTouch)
+        Object.assign(ev, {removedTouch, otherTouch})
+        emitter.emit('lift', ev)
       }
     }
 
     if (!ended && activeCount !== 2) {
       ended = true
-      emitter.emit('end')
+      emitter.emit('end', ev)
     }
   }
 

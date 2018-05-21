@@ -19,8 +19,9 @@ var pinch = require('touch-pinch')
 
 var scale = 1
 pinch(window)
-  .on('change', function (dist, prev) {
-    scale += (dist - prev)
+  .on('change', function (event) {
+    scale += (event.distance - event.lastDistance)
+    event.preventDefault()
   })
 ```
 
@@ -34,20 +35,23 @@ Creates a new `pinch` emitter with the optional `target` element, which defaults
 
 ### events
 
+Events are called with the original event object with additional pinch-specific properties assigned.
+This allows consumers to still do things like `event.preventDefault()`, for example, to prevent mobile window zooming.
+
 #### `pinch.on('start', fn)`
 
 Called when the pinch event begins; i.e. when two fingers are active on screen.
 
-Called with `fn(distance)`, which is the initial Euclidean distance between these two points.
+Called with `fn({distance})`, which is the initial Euclidean distance between these two points.
 
 #### `pinch.on('change', fn)`
 
 Called when the pinch changes; i.e. one or both of the fingers in the pinch have moved.
 
-Called with `fn(distance, prevDistance)`, where `distance` is the new Euclidean distance, and `prevDistance` is the last recorded distance. Often, you will use this delta to compute a new scale:
+Called with `fn({distance, lastDistance})`, where `distance` is the new Euclidean distance, and `lastDistance` is the last recorded distance. Often, you will use this delta to compute a new scale:
 
 ```js
-scale += (distance - prevDistance)
+scale += (distance - lastDistance)
 ```
 
 #### `pinch.on('end', fn)`
@@ -58,13 +62,13 @@ Called when the pinch is finished; i.e. one or both of the active fingers have b
 
 Called before the pinch has started, to indicate that a new finger has been placed on screen (with a maximum of two fingers). 
 
-Called with `fn(newTouch, otherTouch)`, where `newTouch` is the new TouchEvent. `otherTouch` is the touch event that represents the other finger on screen, or `undefined` if none exists.
+Called with `fn({newTouch, otherTouch})`, where `newTouch` is the new TouchEvent. `otherTouch` is the touch event that represents the other finger on screen, or `undefined` if none exists.
 
 #### `pinch.on('lift', fn)`
 
 Called before the pinch has ended, to indicate that a previoulsy pinching finger has been lifted. 
 
-Called with `fn(removedTouch, otherTouch)`, where `removedTouch` is the TouchEvent that was removed from the screen. `otherTouch` is the touch event for the other finger on screen, or `undefined` if none exists.
+Called with `fn({removedTouch, otherTouch})`, where `removedTouch` is the TouchEvent that was removed from the screen. `otherTouch` is the touch event for the other finger on screen, or `undefined` if none exists.
 
 ### members
 
