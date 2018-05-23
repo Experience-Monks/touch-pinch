@@ -2,6 +2,7 @@ var getDistance = require('gl-vec2/distance')
 var EventEmitter = require('events').EventEmitter
 var dprop = require('dprop')
 var eventOffset = require('mouse-event-offset')
+var eventOptions = { capture: false, passive: true };
 
 module.exports = touchPinch
 function touchPinch (target) {
@@ -47,10 +48,10 @@ function touchPinch (target) {
   function enable () {
     if (enabled) return
     enabled = true
-    target.addEventListener('touchstart', onTouchStart, false)
-    target.addEventListener('touchmove', onTouchMove, false)
-    target.addEventListener('touchend', onTouchRemoved, false)
-    target.addEventListener('touchcancel', onTouchRemoved, false)
+    target.addEventListener('touchstart', onTouchStart, eventOptions)
+    target.addEventListener('touchmove', onTouchMove, eventOptions)
+    target.addEventListener('touchend', onTouchRemoved, eventOptions)
+    target.addEventListener('touchcancel', onTouchRemoved, eventOptions)
   }
 
   function disable () {
@@ -61,10 +62,10 @@ function touchPinch (target) {
     fingers[1] = null
     lastDistance = 0
     ended = false
-    target.removeEventListener('touchstart', onTouchStart, false)
-    target.removeEventListener('touchmove', onTouchMove, false)
-    target.removeEventListener('touchend', onTouchRemoved, false)
-    target.removeEventListener('touchcancel', onTouchRemoved, false)
+    target.removeEventListener('touchstart', onTouchStart, eventOptions)
+    target.removeEventListener('touchmove', onTouchMove, eventOptions)
+    target.removeEventListener('touchend', onTouchRemoved, eventOptions)
+    target.removeEventListener('touchcancel', onTouchRemoved, eventOptions)
   }
 
   function onTouchStart (ev) {
