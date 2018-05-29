@@ -33,6 +33,12 @@ function touchPinch (target) {
   emitter.indexOfTouch = indexOfTouch
   return emitter
 
+  function assign(obj, props) {
+    Object.keys(props).forEach(function (prop) {
+      obj[prop] = props[prop]
+    })
+  }
+
   function indexOfTouch (touch) {
     var id = touch.identifier
     for (var i = 0; i < fingers.length; i++) {
@@ -91,13 +97,13 @@ function touchPinch (target) {
         eventOffset(newTouch, target, newFinger.position)
 
         var otherTouch = fingers[oldIndex] ? fingers[oldIndex].touch : undefined
-        Object.assign(ev, {newTouch, otherTouch})
+        assign(ev, {newTouch: newTouch, otherTouch: otherTouch})
         emitter.emit('place', ev)
 
         if (!first) {
           var distance = computeDistance()
           ended = false
-          Object.assign(ev, {distance})
+          assign(ev, {distance: distance})
           emitter.emit('start', ev)
           lastDistance = distance
         }
@@ -119,7 +125,7 @@ function touchPinch (target) {
 
     if (activeCount === 2 && changed) {
       var distance = computeDistance()
-      Object.assign(ev, {distance, lastDistance})
+      assign(ev, {distance: distance, lastDistance: lastDistance})
       emitter.emit('change', ev)
       lastDistance = distance
     }
@@ -135,7 +141,7 @@ function touchPinch (target) {
         activeCount--
         var otherIdx = idx === 0 ? 1 : 0
         var otherTouch = fingers[otherIdx] ? fingers[otherIdx].touch : undefined
-        Object.assign(ev, {removedTouch, otherTouch})
+        assign(ev, {removedTouch: removedTouch, otherTouch: otherTouch})
         emitter.emit('lift', ev)
       }
     }
